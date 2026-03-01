@@ -119,6 +119,8 @@ PRIVATE
     api/api_chat_participants.h
     api/api_cloud_password.cpp
     api/api_cloud_password.h
+    data/data_search_calendar.h
+    data/data_search_calendar.cpp
     api/api_common.cpp
     api/api_common.h
     api/api_confirm_phone.cpp
@@ -2226,7 +2228,7 @@ if (LINUX AND DESKTOP_APP_USE_PACKAGED)
     install(FILES "Resources/art/icon128.png" DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/128x128/apps" RENAME "io.github.kukuruzka165.materialgram.png")
     install(FILES "Resources/art/icon256.png" DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/256x256/apps" RENAME "io.github.kukuruzka165.materialgram.png")
     install(FILES "Resources/art/icon512.png" DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/512x512/apps" RENAME "io.github.kukuruzka165.materialgram.png")
-	install(FILES "Resources/icons/tray_monochrome.svg" DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/symbolic/apps" RENAME "io.github.kukuruzka165.materialgram-symbolic.svg")
+    install(FILES "Resources/icons/tray_monochrome.svg" DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/symbolic/apps" RENAME "io.github.kukuruzka165.materialgram-symbolic.svg")
     install(FILES "Resources/icons/tray_monochrome_attention.svg" DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/symbolic/apps" RENAME "io.github.kukuruzka165.materialgram-attention-symbolic.svg")
     install(FILES "Resources/icons/tray_monochrome_mute.svg" DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/symbolic/apps" RENAME "io.github.kukuruzka165.materialgram-mute-symbolic.svg")
     install(FILES "../lib/xdg/io.github.kukuruzka165.materialgram.desktop" DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/applications")
