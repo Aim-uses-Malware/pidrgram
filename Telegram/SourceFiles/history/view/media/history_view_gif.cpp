@@ -317,7 +317,7 @@ QSize Gif::countCurrentSize(int newWidth) {
 		+ 2 * (st::msgDateImgDelta + st::msgDateImgPadding.x());
 	newWidth = std::clamp(
 		std::max(scaled.width(), minWidthByInfo),
-		st::minPhotoSize,
+		std::min(st::minPhotoSize, thumbMaxWidth),
 		thumbMaxWidth);
 	auto newHeight = qMax(scaled.height(), st::minPhotoSize);
 	if (!activeCurrentStreamed()) {
