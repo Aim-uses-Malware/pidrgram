@@ -26,6 +26,12 @@ jobs:
         shell: cmd
 
     steps:
+      - name: Free up runner disk space.
+        uses: hugoalh/disk-space-optimizer-ghaction@v0.8.1
+        with:
+          operate_async: "True"
+          general_include: ".+"
+
       - name: Prepare directories.
         run: |
           mkdir %userprofile%\TBuild\Libraries
