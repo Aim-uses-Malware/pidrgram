@@ -48,6 +48,9 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include "styles/style_dialogs.h"
 #include "styles/style_layers.h"
 #include "styles/style_window.h"
+#include "plugins/plugin_manager.h"
+#include "plugins/plugin_crash_guard.h"
+#include "plugins/safe_mode_banner.h"
 
 #include <QtGui/QWindow>
 
