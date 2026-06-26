@@ -13,7 +13,6 @@
 // Forward declarations
 namespace Main    { class Session; }
 namespace Window  { class SessionController; }
-class MTPupdates;
 class HistoryItem;
 
 namespace Plugins {
