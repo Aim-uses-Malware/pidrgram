@@ -46,6 +46,11 @@ jobs:
           submodules: recursive
           ref: ${{ env.TAGNAME }}
 
+      - name: Fix MTPUpdates forward-declaration conflict
+        run: |
+          sed -i '/^class MTPUpdates;$/d' Telegram/SourceFiles/plugins/plugin_manager.h
+          grep -n "MTPUpdates" Telegram/SourceFiles/plugins/plugin_manager.h
+
       - name: Pull Docker
         run: |
           docker pull ghcr.io/telegramdesktop/tdesktop/centos_env
