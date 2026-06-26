@@ -37,6 +37,10 @@ class BoxContent;
 class LayerStackWidget;
 } // namespace Ui
 
+namespace Plugins {
+class SafeModeBanner;
+} // namespace Plugins
+
 class MediaPreviewWidget;
 
 extern const char kOptionAutoScrollInactiveChat[];
@@ -136,5 +140,7 @@ private:
 	object_ptr<Window::MediaPreviewWidget> _mediaPreview = { nullptr };
 
 	object_ptr<Window::Theme::WarningWidget> _testingThemeWarning = { nullptr };
+
+	Plugins::SafeModeBanner *_safeModeBanner = nullptr;
 
 };
