@@ -108,6 +108,9 @@ MainWindow::MainWindow(not_null<Window::Controller*> controller)
 	}, lifetime());
 
 	setAttribute(Qt::WA_OpaquePaintEvent);
+
+	_safeModeBanner = new Plugins::SafeModeBanner(bodyWidget());
+	_safeModeBanner->raise();
 }
 
 void MainWindow::initHook() {
@@ -352,6 +355,20 @@ void MainWindow::setupMain(
 			_main->activate();
 		}
 		Core::App().checkStartUrls();
+
+		// ── Plugin Manager ────────────────────────────────────────
+		{
+			const auto faulted = Plugins::CrashGuard::lastFaultedPlugin();
+			if (!faulted.isEmpty()) {
+				Plugins::PluginManager::instance().enterSafeMode(
+					faulted, "Crash detected on previous launch");
+				Plugins::CrashGuard::clearLastFault();
+			}
+			Plugins::CrashGuard::install();
+			if (const auto sc = sessionController()) {
+				Plugins::PluginManager::instance().init(&sc->session());
+			}
+		}
 	}
 	fixOrder();
 	if (const auto strong = weakAnimatedLayer.get()) {
@@ -698,6 +715,7 @@ void MainWindow::fixOrder() {
 	if (_layer) _layer->raise();
 	if (_mediaPreview) _mediaPreview->raise();
 	if (_testingThemeWarning) _testingThemeWarning->raise();
+	if (_safeModeBanner) _safeModeBanner->raise();
 }
 
 void MainWindow::closeEvent(QCloseEvent *e) {
@@ -732,6 +750,18 @@ void MainWindow::updateControlsGeometry() {
 	auto body = bodyWidget()->rect();
 	if (_passcodeLock) _passcodeLock->setGeometry(body);
 	if (_setupEmailLock) _setupEmailLock->setGeometry(body);
+
+	// Safe mode banner sits at the very top; shrink content below it.
+	const auto bannerH = (_safeModeBanner && _safeModeBanner->isVisible())
+		? Plugins::SafeModeBanner::kHeight
+		: 0;
+	if (_safeModeBanner) {
+		_safeModeBanner->resizeToWidth(body.width());
+		_safeModeBanner->move(body.x(), body.y());
+	}
+	const auto contentTop = body.y() + bannerH;
+	const auto contentHeight = body.height() - bannerH;
+
 	auto mainLeft = 0;
 	auto mainWidth = body.width();
 	if (const auto session = sessionController()) {
@@ -743,11 +773,11 @@ void MainWindow::updateControlsGeometry() {
 	if (_main) {
 		_main->setGeometry({
 			body.x() + mainLeft,
-			body.y(),
+			contentTop,
 			mainWidth,
-			body.height() });
+			contentHeight });
 	}
-	if (_intro) _intro->setGeometry(body);
+	if (_intro) _intro->setGeometry({ body.x(), contentTop, body.width(), contentHeight });
 	if (_layer) _layer->setGeometry(body);
 	if (_mediaPreview) _mediaPreview->setGeometry(body);
 	if (_testingThemeWarning) _testingThemeWarning->setGeometry(body);
@@ -770,4 +800,6 @@ void MainWindow::handleStartFiles(
 	}
 }
 
-MainWindow::~MainWindow() = default;
+MainWindow::~MainWindow() {
+	Plugins::PluginManager::instance().shutdown();
+}
