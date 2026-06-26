@@ -52,6 +52,9 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include "styles/style_layers.h"
 #include "styles/style_menu_icons.h"
 
+#include "plugins/plugin_manager_box.h"
+#include "plugins/plugin_manager.h"
+
 #include <QtCore/QJsonDocument>
 #include <QtGui/QGuiApplication>
 
@@ -372,6 +375,30 @@ void Experimental::setupContent() {
 		content,
 		_reloadOptionsRequests.events(),
 		_query.value());
+
+	// ── Plugin Manager ────────────────────────────────────────────────────
+	Ui::AddSkip(content);
+	Ui::AddDivider(content);
+	Ui::AddSkip(content);
+
+	content->add(
+		object_ptr<Ui::FlatLabel>(
+			content,
+			rpl::single(QString("Плагины")),
+			st::settingsSubsectionTitle),
+		st::settingsSubsectionTitlePadding);
+
+	const auto pluginBtn = content->add(
+		object_ptr<Button>(
+			content,
+			rpl::single(QString("Менеджер плагинов")),
+			st::settingsButtonNoIcon));
+	pluginBtn->addClickHandler([this] {
+		controller()->show(Box<Plugins::PluginManagerBox>());
+	});
+
+	Ui::AddSkip(content);
+	// ─────────────────────────────────────────────────────────────────────
 
 	Ui::ResizeFitChild(this, content);
 }
